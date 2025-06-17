@@ -1,0 +1,50 @@
+### 1. Criar a conta de origem (Maria)
+POST http://localhost:8080/contas
+Content-Type: application/json
+
+{
+    "nomeTitular": "Dainarah job",
+    "cpf": "84634363542",
+    "chavePix": "Dainarah.job@email.com"
+}
+
+### 2. Criar a conta de destino (João)
+POST http://localhost:8080/contas
+Content-Type: application/json
+
+{
+    "nomeTitular": "Wallace Silva",
+    "cpf": "14523980832",
+    "chavePix": "wallace.s@email.com"
+}
+
+
+### 3. Depositar R$ 500 na conta da Maria (id = 1)
+# OBS: O ID da Maria será 1 se você tiver limpado o banco. Se não, ajuste o ID.
+PATCH http://localhost:8080/contas/10/depositar
+Content-Type: application/json
+
+50.000
+
+
+### 4. TESTE DE SUCESSO: Maria envia R$ 150 para João
+POST http://localhost:8080/transacoes
+Content-Type: application/json
+
+{
+    "idContaOrigem": 6,
+    "chavePixDestino": "wallace.s@email.com",
+    "valor": 150.00
+}
+
+
+### 5. TESTE DE ERRO: Maria tenta enviar R$ 500 (Saldo insuficiente)
+# Saldo da Maria agora é R$ 350. Este pedido deve falhar.
+POST http://localhost:8080/transacoes
+Content-Type: application/json
+
+{
+    "idContaOrigem": 6,
+    "chavePixDestino": "wallace.s@email.com",
+    "valor": 500.00
+}
